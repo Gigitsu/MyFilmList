@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="g2FilmsApp">
+<head>
+  <meta charset="UTF-8">
+  <title>Films</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="css/xeditable.css">
+
+  <script src="js/angular.min.js"></script>
+  <script src="js/xeditable.min.js"></script>
+
+  <style>
+    body { padding-top: 70px; }
+    i.save { line-height: 30px; }
+    tr {
+      display: flex;
+      align-items: stretch;
+    }
+    td:first-child, th:first-child { flex: 1; }
+    td.actions a { visibility: hidden; }
+    tr:hover td.actions a { visibility: visible;}
+  </style>
+</head>
+<body ng-controller="FilmsCtrl">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">
+          <img height="20" width="20" src="data:image/png;base64,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"/>
+        </a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="#positions" data-toggle="modal" data-target="#editPositions">Modifica posizioni</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#top">Torna su</a></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <label for="query">Email address</label>
+          <input type="text" class="form-control" id="query" placeholder="Ricerca" ng-model="query">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>Film</th>
+              <th colspan="2">Posizione</th>
+            </tr>
+          </thead>
+          <tbody>
+            <form class="form-inline">
+              <tr>
+                <td>
+                  <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Nome" ng-model="newFilm.name">
+                  </div>
+                </td>
+                <td>
+                  <select class="form-control" ng-model="newFilm.device">
+                    <option ng-repeat="device in devices" value="{{device.id}}">{{device.name}}</option>
+                  </select>
+                </td>
+                <td>
+                  <a ng-click="addFilm()"><i class="save glyphicon glyphicon-floppy-disk"></i></a>
+                </td>
+              </tr>
+            </form>
+            <tr ng-repeat="film in films | toArray:false | orderBy:'name' | filter:query">
+              <td>
+                <span editable-text="film.name" onaftersave="updateFilm(film)">{{film.name}}</span>
+              </td>
+              <td>
+                <span editable-select="film.device" onaftersave="updateFilm(film)" e-ng-options="d.id as d.name for d in devices" class="label label-{{devices[film.device].type}}">{{devices[film.device].name}}</span>
+              </td>
+              <td class="actions">
+                <!-- <a href="#"><i class="glyphicon glyphicon-pencil"></i></a> -->
+                <a ng-click="removeFilm(film)"><i class="glyphicon glyphicon-trash"></i></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="editPositions" tabindex="-1" role="dialog" aria-labelledby="editPositionsLabel">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Modifica posizioni</h4>
+        </div>
+        <div class="modal-body">
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th colspan="2">Tipo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <form class="form-inline">
+                <tr>
+                  <td>
+                    <div class="form-group">
+                      <input type="text" class="form-control" placeholder="Nome" ng-model="newDevice.name">
+                    </div>
+                  </td>
+                  <td>
+                    <select class="form-control" ng-model="newDevice.type">
+                      <option name="type" ng-repeat="type in deviceTypes" value="{{type}}">{{type}}</option>
+                    </select>
+                  </td>
+                  <td>
+                    <a ng-click="addDevice()"><i class="save glyphicon glyphicon-floppy-disk"></i></a>
+                  </td>
+                </tr>
+              </form>
+              <tr ng-repeat="device in devices">
+                <td><span editable-text="device.name" onaftersave="updateDevice(device)">{{device.name}}</span></td>
+                <td><span editable-select="device.type" onaftersave="updateDevice(device)" e-ng-options="t for t in deviceTypes" class="label label-{{device.type}}">{{device.type}}</span></td>
+                <td class="actions">
+                  <!-- <a href="#"><i class="glyphicon glyphicon-pencil"></i></a> -->
+                  <a ng-click="removeDevice(device)"><i class="glyphicon glyphicon-trash"></i></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+<script src="js/jquery-2.1.4.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
