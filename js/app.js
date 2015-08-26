@@ -1,9 +1,19 @@
 var $newFilmForm = $('#new-film :input');
 var $newDeviceForm = $('#new-device :input');
 
-angular.module('angular-toArrayFilter', []);
+angular.module('showDuplicatesFilter', []).filter('showDuplicates', function () {
+  return function (input, toggle) {
+    if(toggle) {
+      var grouped = _.groupBy(input, 'name');
+      var onlyDups = _.filter(grouped, function(item){ return item.length > 1; });
+      return _.flatten(onlyDups);
+    } else {
+      return input;
+    }
+  };
+});
 
-var app = angular.module('g2FilmsApp', ['xeditable', 'angular-toArrayFilter']);
+var app = angular.module('g2FilmsApp', ['xeditable', 'showDuplicatesFilter']);
 
 app.run(function(editableOptions) {
   editableOptions.theme = 'bs3';
@@ -33,6 +43,7 @@ app.controller('FilmsCtrl', function ($scope, $http) {
 
   $scope.newFilm = {};
   $scope.newDevice = {};
+  $scope.showOnlyDups = false;
   $scope.deviceTypes = {
     'default':'grigio',
     'primary':'blu',
