@@ -1,3 +1,6 @@
+var $newFilmForm = $('#new-film :input');
+var $newDeviceForm = $('#new-device :input');
+
 angular.module('angular-toArrayFilter', []);
 
 var app = angular.module('g2FilmsApp', ['xeditable', 'angular-toArrayFilter']);
@@ -28,9 +31,15 @@ app.controller('FilmsCtrl', function ($scope, $http) {
     });
   });
 
+  $scope.newFilm = {};
+  $scope.newDevice = {};
   $scope.deviceTypes = ['default', 'primary', 'success', 'info', 'warning', 'danger'];
 
+  $scope.resetNewFilm = function() { $scope.newFilm = {}; }
   $scope.addFilm = function() {
+    if(! ($scope.newFilm.hasOwnProperty('name') && $scope.newFilm.hasOwnProperty('device')) ) return;
+
+    $newFilmForm.attr("disabled", true);
     $http({
       url: url,
       method: 'POST',
@@ -40,7 +49,8 @@ app.controller('FilmsCtrl', function ($scope, $http) {
       var nf = angular.copy($scope.newFilm);
       nf.id = response.data;
       $scope.films[nf.id] = nf;
-      $scope.newFilm = {}
+      $scope.resetNewFilm();
+      $newFilmForm.attr("disabled", false);
     })
   }
   $scope.updateFilm = function(film) {
@@ -61,7 +71,11 @@ app.controller('FilmsCtrl', function ($scope, $http) {
     delete $scope.films[film.id];
   }
 
+  $scope.resetNewDevice = function() { $scope.newDevice = {}; }
   $scope.addDevice = function() {
+    if(! ($scope.newDevice.hasOwnProperty('name') && $scope.newDevice.hasOwnProperty('type')) ) return;
+
+    $newDeviceForm.attr("disabled", true);
     $http({
       url: url,
       method: 'POST',
@@ -71,7 +85,8 @@ app.controller('FilmsCtrl', function ($scope, $http) {
       var nd = angular.copy($scope.newDevice);
       nd.id = response.data;
       $scope.devices[nd.id] = nd;
-      $scope.newDevice = {}
+      $scope.resetNewDevice();
+      $newDeviceForm.attr("disabled", false);
     })
   }
   $scope.updateDevice = function(device) {
