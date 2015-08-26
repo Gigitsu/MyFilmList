@@ -78,8 +78,7 @@ class DB extends SQLite3
     private function fetchResults($results) {
       $rows = array();
       while($r = $results->fetchArray(SQLITE3_ASSOC)) {
-        $i = intval($r['id']);
-        $rows[$i] = $r;
+        $rows[] = $r;
       }
       return $rows;
     }

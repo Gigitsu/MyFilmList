@@ -1,22 +1,4 @@
-angular.module('angular-toArrayFilter', [])
-
-.filter('toArray', function () {
-  return function (obj, addKey) {
-    if (!angular.isObject(obj)) return obj;
-    if ( addKey === false ) {
-      return Object.keys(obj).map(function(key) {
-        return obj[key];
-      });
-    } else {
-      return Object.keys(obj).map(function (key) {
-        var value = obj[key];
-        return angular.isObject(value) ?
-          Object.defineProperty(value, '$key', { enumerable: false, value: key}) :
-          { $key: key, $value: value };
-      });
-    }
-  };
-});
+angular.module('angular-toArrayFilter', []);
 
 var app = angular.module('g2FilmsApp', ['xeditable', 'angular-toArrayFilter']);
 
@@ -40,7 +22,10 @@ app.controller('FilmsCtrl', function ($scope, $http) {
     method: 'GET',
     params: {action: 'devices'}
   }).then(function(response) {
-    $scope.devices = response.data;
+    $scope.devices = {};
+    _.each(response.data, function(d){
+      $scope.devices[d.id] = d;
+    });
   });
 
   $scope.deviceTypes = ['default', 'primary', 'success', 'info', 'warning', 'danger'];
