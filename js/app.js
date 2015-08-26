@@ -24,7 +24,21 @@ angular.module('showDuplicatesFilter', []).filter('showDuplicates', function () 
   };
 });
 
-var app = angular.module('g2FilmsApp', ['xeditable', 'showDuplicatesFilter']);
+angular.module('filmsFilter', []).filter('films', function () {
+  return function (input, devices, query) {
+    if(query) {
+      query = query.toLowerCase();
+      var posId = _.map(
+        _.filter(devices, function(d){ return d.name.indexOf(query) != -1; }),
+        function(d) { return d.id; }
+      );
+      return _.filter(input, function(f) { return f.name.toLowerCase().indexOf(query) + posId.indexOf(f.device) != -2; } );
+    }
+    return input;
+  };
+});
+
+var app = angular.module('g2FilmsApp', ['xeditable', 'showDuplicatesFilter', 'filmsFilter']);
 
 app.run(function(editableOptions) {
   editableOptions.theme = 'bs3';

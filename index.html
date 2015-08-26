@@ -103,7 +103,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="film in films | orderBy:'name' | showDuplicates:showOnlyDups | filter:query">
+            <tr ng-repeat="film in films | orderBy:'name' | showDuplicates:showOnlyDups | films:devices:query">
               <td>
                 <span editable-text="film.name" onaftersave="updateFilm(film)">{{film.name}}</span>
               </td>
