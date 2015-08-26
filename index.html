@@ -141,7 +141,7 @@
                           <div class="form-group">
                             <select class="form-control" ng-model="newDevice.type">
                               <option value="" disabled selected>Posizione</option>
-                              <option name="type" ng-repeat="type in deviceTypes" value="{{type}}">{{type}}</option>
+                              <option name="type" ng-repeat="(v, t) in deviceTypes" value="{{v}}">{{t}}</option>
                             </select>
                           </div>
                         </div>
@@ -167,7 +167,7 @@
                   <tbody>
                     <tr ng-repeat="device in devices">
                       <td><span editable-text="device.name" onaftersave="updateDevice(device)">{{device.name}}</span></td>
-                      <td><span editable-select="device.type" onaftersave="updateDevice(device)" e-ng-options="t for t in deviceTypes" class="label label-{{device.type}}">{{device.type}}</span></td>
+                      <td><span editable-select="device.type" onaftersave="updateDevice(device)" e-ng-options="t for t in deviceTypes" class="label label-{{device.type}}">{{deviceTypes[device.type]}}</span></td>
                       <td class="actions">
                         <!-- <a href="#"><i class="glyphicon glyphicon-pencil"></i></a> -->
                         <a ng-click="removeDevice(device)"><i class="glyphicon glyphicon-trash"></i></a>

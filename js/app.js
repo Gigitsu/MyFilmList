@@ -33,7 +33,14 @@ app.controller('FilmsCtrl', function ($scope, $http) {
 
   $scope.newFilm = {};
   $scope.newDevice = {};
-  $scope.deviceTypes = ['default', 'primary', 'success', 'info', 'warning', 'danger'];
+  $scope.deviceTypes = {
+    'default':'grigio',
+    'primary':'blu',
+    'success':'verde',
+    'info':'azzurro',
+    'warning':'giallo',
+    'danger':'rosso'
+  };
 
   $scope.resetNewFilm = function() { $scope.newFilm = {}; }
   $scope.addFilm = function() {
