@@ -1,3 +1,14 @@
+Array.prototype.remove = function() {
+    var what, a = arguments, L = a.length, ax;
+    while (L && this.length) {
+        what = a[--L];
+        while ((ax = this.indexOf(what)) !== -1) {
+            this.splice(ax, 1);
+        }
+    }
+    return this;
+};
+
 var $newFilmForm = $('#new-film :input');
 var $newDeviceForm = $('#new-device :input');
 
@@ -86,7 +97,7 @@ app.controller('FilmsCtrl', function ($scope, $http) {
       params: {action: 'removeFilm'},
       data: {film: film}
     })
-    delete $scope.films[film.id];
+    $scope.films.remove(film);
   }
 
   $scope.resetNewDevice = function() { $scope.newDevice = {}; }
@@ -122,7 +133,7 @@ app.controller('FilmsCtrl', function ($scope, $http) {
       params: {action: 'removeDevice'},
       data: {device: device}
     })
-    delete $scope.devices[device.id];
+    $scope.devices.remove(device);
   }
 
 });
