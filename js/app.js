@@ -10,7 +10,7 @@ app.run(function(editableOptions) {
 });
 
 app.controller('FilmsCtrl', function ($scope, $http) {
-  var url = '/ajax.php';
+  var url = 'ajax.php';
 
   $http({
     url: url,
