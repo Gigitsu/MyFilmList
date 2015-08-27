@@ -15,9 +15,11 @@ var $newDeviceForm = $('#new-device :input');
 angular.module('showDuplicatesFilter', []).filter('showDuplicates', function () {
   return function (input, toggle) {
     if(toggle) {
-      var grouped = _.groupBy(input, 'name');
-      var onlyDups = _.filter(grouped, function(item){ return item.length > 1; });
-      return _.flatten(onlyDups);
+      return _.chain(input).
+        groupBy('name').
+        filter(function(item){ return item.length > 1; }).
+        flatten().
+        value();
     } else {
       return input;
     }
@@ -28,10 +30,9 @@ angular.module('filmsFilter', []).filter('films', function () {
   return function (input, devices, query) {
     if(query) {
       query = query.toLowerCase();
-      var posId = _.map(
-        _.filter(devices, function(d){ return d.name.indexOf(query) != -1; }),
-        function(d) { return d.id; }
-      );
+      var posId = _.chain(devices).
+        filter(function(d) { return d.name.indexOf(query) != -1; }).
+        map(function(d) { return d.id; }).value();
       return _.filter(input, function(f) { return f.name.toLowerCase().indexOf(query) + posId.indexOf(f.device) != -2; } );
     }
     return input;
