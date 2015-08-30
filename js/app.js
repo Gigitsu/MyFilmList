@@ -33,7 +33,10 @@ angular.module('filmsFilter', []).filter('films', function () {
       var posId = _.chain(devices).
         filter(function(d) { return d.name.indexOf(query) != -1; }).
         map(function(d) { return d.id; }).value();
-      return _.filter(input, function(f) { return f.name.toLowerCase().indexOf(query) + posId.indexOf(f.device) != -2; } );
+
+      return _.chain(input).
+        filter(function(f) { return f.name.toLowerCase().indexOf(query) + posId.indexOf(f.device) != -2; } ).
+        value();
     }
     return input;
   };
@@ -92,7 +95,7 @@ app.controller('FilmsCtrl', function ($scope, $http) {
     }).then(function(response) {
       var nf = angular.copy($scope.newFilm);
       nf.id = response.data;
-      $scope.films[nf.id] = nf;
+      $scope.films.push(nf);
       $scope.resetNewFilm();
       $newFilmForm.attr("disabled", false);
     })
@@ -128,7 +131,7 @@ app.controller('FilmsCtrl', function ($scope, $http) {
     }).then(function(response) {
       var nd = angular.copy($scope.newDevice);
       nd.id = response.data;
-      $scope.devices[nd.id] = nd;
+      $scope.devices.push(nd);
       $scope.resetNewDevice();
       $newDeviceForm.attr("disabled", false);
     })
