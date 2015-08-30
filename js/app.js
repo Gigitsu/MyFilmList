@@ -131,7 +131,7 @@ app.controller('FilmsCtrl', function ($scope, $http) {
     }).then(function(response) {
       var nd = angular.copy($scope.newDevice);
       nd.id = response.data;
-      $scope.devices.push(nd);
+      $scope.devices[nd.id] = nd;
       $scope.resetNewDevice();
       $newDeviceForm.attr("disabled", false);
     })
