@@ -95,6 +95,7 @@ app.controller('FilmsCtrl', function ($scope, $http) {
     }).then(function(response) {
       var nf = angular.copy($scope.newFilm);
       nf.id = response.data;
+      nf.device = parseInt(nf.device);
       $scope.films.push(nf);
       $scope.resetNewFilm();
       $newFilmForm.attr("disabled", false);
@@ -130,7 +131,7 @@ app.controller('FilmsCtrl', function ($scope, $http) {
       data: {device: $scope.newDevice}
     }).then(function(response) {
       var nd = angular.copy($scope.newDevice);
-      nd.id = response.data;
+      nd.id = parseInt(response.data);
       $scope.devices[nd.id] = nd;
       $scope.resetNewDevice();
       $newDeviceForm.attr("disabled", false);
