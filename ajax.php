@@ -17,6 +17,7 @@ class DB extends SQLite3
       $stm = $this->prepare($query);
       $stm->bindValue(':device', $film->device, SQLITE3_INTEGER);
       $stm->bindValue(':name', $film->name, SQLITE3_TEXT);
+      $stm->bindValue(':seen', $film->seen, SQLITE3_TEXT);
       if(property_exists($film, 'id'))
         $stm->bindValue(':id',$film->id, SQLITE3_INTEGER);
       return $stm;
@@ -30,7 +31,7 @@ class DB extends SQLite3
     }
 
     function updateFilm($film) {
-      $query = "UPDATE films SET name = :name,  device = :device WHERE id = :id";
+      $query = "UPDATE films SET name = :name,  device = :device, seen = :seen WHERE id = :id";
       $stm = $this->bindFilm($query, $film);
       $stm->execute();
     }

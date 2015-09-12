@@ -118,6 +118,12 @@ app.controller('FilmsCtrl', function ($scope, $http) {
     })
     $scope.films.remove(film);
   }
+  $scope.toggleSeen = function(film) {
+    if(film.seen == 0) film.seen = 1;
+    else film.seen = 0;
+    
+    $scope.updateFilm(film);
+  }
 
   $scope.resetNewDevice = function() { $scope.newDevice = {}; }
   $scope.addDevice = function() {

@@ -19,7 +19,9 @@
     }
     td:first-child, th:first-child { flex: 1; }
     td.actions a { visibility: hidden; }
-    tr:hover td.actions a { visibility: visible;}
+    tr:hover td.actions a { visibility: visible; }
+    .glyphicon-eye-close.unseen { opacity: 0.4; }
+    .glyphicon-eye-close.unseen:hover { opacity: 0.8; }
   </style>
 </head>
 <body ng-controller="FilmsCtrl">
@@ -98,13 +100,15 @@
           <thead>
             <tr>
               <th>Film</th>
-              <th colspan="2">Posizione</th>
             </tr>
           </thead>
           <tbody>
             <tr ng-repeat="film in films | orderBy:'name' | films:devices:query | showDuplicates:showOnlyDups">
               <td>
                 <span editable-text="film.name" onaftersave="updateFilm(film)">{{film.name}}</span>
+              </td>
+              <td>
+                <a ng-click="toggleSeen(film)"><i class="glyphicon glyphicon-eye-close" ng-class="{'unseen': film.seen == 0}"></i></a>
               </td>
               <td>
                 <span editable-select="film.device" onaftersave="updateFilm(film)" e-ng-options="d.id as d.name for d in devices" class="label label-{{devices[film.device].type}}">{{devices[film.device].name}}</span>
