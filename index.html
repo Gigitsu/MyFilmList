@@ -22,6 +22,8 @@
     tr:hover td.actions a { visibility: visible; }
     .glyphicon-eye-close.unseen { opacity: 0.4; }
     .glyphicon-eye-close.unseen:hover { opacity: 0.8; }
+    .filters .btn-group { width: 100%; }
+    .filters .btn-group .btn { width: 50%; }
   </style>
 </head>
 <body ng-controller="FilmsCtrl">
@@ -52,16 +54,23 @@
   </nav>
 
   <div class="container">
-    <div class="row">
-      <div class="col-xs-11">
+    <div class="row filters">
+      <div class="col-xs-10">
         <div class="form-group">
           <input type="text" class="form-control" id="query" placeholder="Ricerca" ng-model="query">
         </div>
       </div>
-      <div class="col-xs-1">
-        <button type="button" class="btn btn-primary btn-block hasTooltip" data-toggle="button" title="Mostra solo duplicati" ng-click="showOnlyDups=!showOnlyDups" aria-pressed="false" autocomplete="off">
-          <i class="glyphicon glyphicon-random"></i>
-        </button>
+      <div class="col-xs-2">
+        <div class="btn-group" data-toggle="buttons">
+          <label class="btn btn-primary hasTooltip" title="Mostra solo i film non visti" ng-click="showOnlyUnseen=!showOnlyUnseen">
+            <input type="checkbox">
+            <i class="glyphicon glyphicon-eye-close"></i>
+          </label>
+          <label class="btn btn-primary hasTooltip" title="Mostra solo duplicati" ng-click="showOnlyDups=!showOnlyDups">
+            <input type="checkbox">
+            <i class="glyphicon glyphicon-random"></i>
+          </label>
+        </div>
       </div>
     </div>
     <div class="row">
@@ -103,7 +112,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="film in films | orderBy:'name' | films:devices:query | showDuplicates:showOnlyDups">
+            <tr ng-repeat="film in films | orderBy:'name' | films:devices:query | showDuplicatesUnseen:showOnlyDups:showOnlyUnseen">
               <td>
                 <span editable-text="film.name" onaftersave="updateFilm(film)">{{film.name}}</span>
               </td>
@@ -200,7 +209,7 @@
 <script src="js/app.js"></script>
 <script>
   $(function () {
-    $('.hasTooltip').tooltip()
+    $('.hasTooltip').tooltip({container:'body'})
   });
 </script>
 </body>

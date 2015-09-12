@@ -12,12 +12,13 @@ Array.prototype.remove = function() {
 var $newFilmForm = $('#new-film :input');
 var $newDeviceForm = $('#new-device :input');
 
-angular.module('showDuplicatesFilter', []).filter('showDuplicates', function () {
-  return function (input, toggle) {
-    if(toggle) {
+angular.module('showDuplicatesUnseenFilter', []).filter('showDuplicatesUnseen', function () {
+  return function (input, toggleDups, toggleUnseen) {
+    if(toggleDups || toggleUnseen) {
       return _.chain(input).
+        filter(function(item){ return !toggleUnseen || item.seen == 0; }).
         groupBy('name').
-        filter(function(item){ return item.length > 1; }).
+        filter(function(item){ return !toggleDups || item.length > 1; }).
         flatten().
         value();
     } else {
@@ -42,7 +43,7 @@ angular.module('filmsFilter', []).filter('films', function () {
   };
 });
 
-var app = angular.module('g2FilmsApp', ['xeditable', 'showDuplicatesFilter', 'filmsFilter']);
+var app = angular.module('g2FilmsApp', ['xeditable', 'showDuplicatesUnseenFilter', 'filmsFilter']);
 
 app.run(function(editableOptions) {
   editableOptions.theme = 'bs3';
@@ -121,7 +122,7 @@ app.controller('FilmsCtrl', function ($scope, $http) {
   $scope.toggleSeen = function(film) {
     if(film.seen == 0) film.seen = 1;
     else film.seen = 0;
-    
+
     $scope.updateFilm(film);
   }
 
