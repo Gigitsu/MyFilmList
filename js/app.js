@@ -88,6 +88,7 @@ app.controller('FilmsCtrl', function ($scope, $http) {
     if(! ($scope.newFilm.hasOwnProperty('name') && $scope.newFilm.hasOwnProperty('device')) ) return;
 
     $newFilmForm.attr("disabled", true);
+    $scope.newFilm.seen = 0;
     $http({
       url: url,
       method: 'POST',
