@@ -138,6 +138,9 @@ app.controller('FilmsCtrl', function ($scope, $http) {
       params: {action: 'addDevice'},
       data: {device: $scope.newDevice}
     }).then(function(response) {
+      if($scope.newDevice.default)
+        _.each($scope.devices, function(item) { return item.default = false; } );
+        
       var nd = angular.copy($scope.newDevice);
       nd.id = parseInt(response.data);
       $scope.devices[nd.id] = nd;
@@ -160,7 +163,7 @@ app.controller('FilmsCtrl', function ($scope, $http) {
       params: {action: 'removeDevice'},
       data: {device: device}
     })
-    $scope.devices.remove(device);
+    delete $scope.devices[device.id];
   }
 
 });

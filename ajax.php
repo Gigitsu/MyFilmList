@@ -9,7 +9,7 @@ class DB extends SQLite3
 
     function getFilms() {
       return $this->fetchResults(
-        $this->query("SELECT * FROM films")
+        $this->query("SELECT * FROM `films`")
       );
     }
 
@@ -24,27 +24,27 @@ class DB extends SQLite3
     }
 
     function addFilm($film) {
-      $query = "INSERT INTO films (name, device) VALUES (:name, :device)";
+      $query = "INSERT INTO `films` (`name`, `device`) VALUES (:name, :device)";
       $stm = $this->bindFilm($query, $film);
       $stm->execute();
       return $this->lastInsertRowID();
     }
 
     function updateFilm($film) {
-      $query = "UPDATE films SET name = :name,  device = :device, seen = :seen WHERE id = :id";
+      $query = "UPDATE `films` SET `name` = :name,  `device` = :device, `seen` = :seen WHERE `id` = :id";
       $stm = $this->bindFilm($query, $film);
       $stm->execute();
     }
 
     function removeFilm($film) {
-      $query = "DELETE FROM films WHERE id = :id";
+      $query = "DELETE FROM `films` WHERE `id` = :id";
       $stm = $this->bindFilm($query, $film);
       $stm->execute();
     }
 
     function getDevices() {
       return $this->fetchResults(
-        $this->query("SELECT * FROM devices")
+        $this->query("SELECT * FROM `devices`")
       );
     }
 
@@ -52,26 +52,39 @@ class DB extends SQLite3
       $stm = $this->prepare($query);
       $stm->bindValue(':type', $device->type, SQLITE3_TEXT);
       $stm->bindValue(':name', $device->name, SQLITE3_TEXT);
-      if(property_exists($device, 'id'))
-        $stm->bindValue(':id',$device->id, SQLITE3_INTEGER);
+
+      if(property_exists($device, 'default')) {
+        $stm->bindValue(':default', $device->default, SQLITE3_INTEGER);
+      } else {
+        $stm->bindValue(':default', false, SQLITE3_INTEGER);
+      }
+      if(property_exists($device, 'id')) {
+          $stm->bindValue(':id',$device->id, SQLITE3_INTEGER);
+      }
+
       return $stm;
     }
 
     function addDevice($device) {
-      $query = "INSERT INTO devices (name, type) VALUES (:name, :type)";
+      if($device->default) {
+        $this->prepare("UPDATE `devices` SET `default` = 0")
+          ->execute();
+      }
+
+      $query = "INSERT INTO `devices` (`name`, `type`, `default`) VALUES (:name, :type, :default)";
       $stm = $this->bindDevice($query, $device);
       $stm->execute();
       return $this->lastInsertRowID();
     }
 
     function updateDevice($device) {
-      $query = "UPDATE devices SET name = :name, type = :type WHERE id = :id";
+      $query = "UPDATE `devices` SET `name` = :name, type = :type WHERE `id` = :id";
       $stm = $this->bindDevice($query, $device);
       $stm->execute();
     }
 
     function removeDevice($device) {
-      $query = "DELETE FROM devices WHERE id = :id";
+      $query = "DELETE FROM `devices` WHERE `id` = :id";
       $stm = $this->bindDevice($query, $device);
       $stm->execute();
     }
